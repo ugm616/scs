@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Staggered Chat System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #111;
+      color: #eee;
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
+    }
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .banner {
+      padding: 1em;
+      border-bottom: 1px solid #333;
+      text-align: center;
+    }
+    .chat {
+      flex: 1;
+      overflow: auto;
+      padding: 1em;
+    }
+    .input {
+      border-top: 1px solid #333;
+      padding: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="banner">Staggered Chat System</div>
+    <div class="chat" id="chat-log"></div>
+    <div class="input">
+      <input type="text" id="chat-input" placeholder="Type message..." style="width: 100%; background: #222; color: #eee; border: 1px solid #444;">
+    </div>
+  </div>
+  <script src="scs.min.js" defer></script>
+</body>
+</html>
