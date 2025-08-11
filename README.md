@@ -7,6 +7,7 @@ SCS creates peer-to-peer chat “rooms” via manual handshake. Ideal for weak n
 ---
 
 scs/
+
 ├── index.html          # Minimal UI with header, input, messages
 
 ├── style.css           # Lightweight optional styling
