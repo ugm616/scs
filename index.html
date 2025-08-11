@@ -2,17 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
   <title>Chat</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Minimal header: room number only -->
   <header id="room-header"><h1 id="room-number">—</h1></header>
-  <main id="chat-container"></main>
+
+  <!-- Signaling panel: collapses away after connection -->
+  <section id="signal-panel">
+    <details open id="signal-details">
+      <summary>Connect peers</summary>
+
+      <div class="row">
+        <label class="lbl">Room</label>
+        <input id="room-id" type="text" readonly />
+        <button id="regen-room" title="Generate a new room">New</button>
+      </div>
+
+      <div class="row">
+        <label class="lbl">Key</label>
+        <input id="key-id" type="text" readonly />
+        <button id="regen-key" title="Generate a new key">New</button>
+        <button id="copy-link" title="Copy join link">Copy link</button>
+      </div>
+
+      <div class="row">
+        <label class="lbl">ICE</label>
+        <input id="stun-list" type="text" placeholder="Optional: stun:stun.l.google.com:19302,stun:global.stun.twilio.com:3478" />
+      </div>
+
+      <div class="row">
+        <button id="btn-offer">Create offer</button>
+        <button id="btn-answer">Accept offer, make answer</button>
+      </div>
+
+      <div class="row">
+        <textarea id="local-signal" placeholder="Your offer/answer will appear here…" rows="6"></textarea>
+      </div>
+      <div class="row">
+        <textarea id="remote-signal" placeholder="Paste the other side’s offer/answer here…" rows="6"></textarea>
+      </div>
+      <div class="row">
+        <button id="copy-local">Copy local</button>
+        <button id="apply-remote">Apply remote</button>
+        <button id="clear-sigs" title="Clear both text areas">Clear</button>
+      </div>
+
+      <div class="row qr">
+        <canvas id="qr-canvas" width="192" height="192"></canvas>
+        <div class="qr-buttons">
+          <button id="show-qr-offer" title="Show QR for local payload">QR for local</button>
+          <button id="hide-qr">Hide QR</button>
+        </div>
+      </div>
+
+      <p class="hint">
+        Flow:
+        1) On one device click “Create offer”, copy or show QR. 2) On the other device click “Accept offer…”, paste or scan, then copy your answer back. 3) On the first device paste the answer and click “Apply remote”.
+      </p>
+    </details>
+  </section>
+
+  <main id="chat-container" aria-live="polite"></main>
+
   <footer>
-    <input type="text" id="message-input" placeholder="Type…" />
-    <button id="send-button">Send</button>
+    <input type="text" id="message-input" placeholder="Type…" autocomplete="off" />
+    <button id="send-button" disabled>Send</button>
   </footer>
+
   <script src="crypto.js"></script>
   <script src="utils.js"></script>
   <script src="signaling.js"></script>
