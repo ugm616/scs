@@ -1,46 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Staggered Chat System</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <title>SCS</title>
+  <meta name="color-scheme" content="light dark">
   <style>
-    body {
-      background: #111;
-      color: #eee;
-      font-family: monospace;
-      margin: 0;
-      padding: 0;
+    :root {
+      --bg: #0b0c10;
+      --panel: #121318;
+      --soft: #1a1c24;
+      --txt: #e6e8ee;
+      --muted: #9aa0aa;
+      --acc: #6ee7b7;
+      --err: #ff6b6b;
+      --warn: #ffd166;
+      --link: #7aa2f7;
+      --border: #2a2d36;
     }
-    #app {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --panel: #ffffff;
+        --soft: #f2f4f8;
+        --txt: #0f172a;
+        --muted: #475569;
+        --acc: #059669;
+        --link: #2563eb;
+        --border: #e5e7eb;
+      }
     }
-    .banner {
-      padding: 1em;
-      border-bottom: 1px solid #333;
-      text-align: center;
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--txt);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height: 1.4;
+    }
+    .wrap {
+      max-width: 980px; margin: 24px auto; padding: 0 16px;
+    }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 16px;
+    }
+    h1 { font-size: 22px; margin: 0; }
+    .badge {
+      border: 1px solid var(--border);
+      background: var(--soft);
+      padding: 6px 10px; border-radius: 10px; font-size: 12px; color: var(--muted);
+    }
+    .grid {
+      display: grid; grid-template-columns: 1fr; gap: 16px;
+    }
+    @media (min-width: 940px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .card {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 12px; padding: 14px;
+    }
+    .card h2 { font-size: 16px; margin: 0 0 8px 0; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .row > * { flex: 0 0 auto; }
+    .grow { flex: 1 1 auto; }
+    .muted { color: var(--muted); }
+    .ok { color: var(--acc); }
+    .warn { color: var(--warn); }
+    .err { color: var(--err); }
+    textarea, input[type="text"] {
+      width: 100%; box-sizing: border-box;
+      background: var(--soft); color: var(--txt);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px; font-size: 13px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      min-height: 120px; resize: vertical;
+    }
+    .small { min-height: 64px; }
+    button, .btn {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      padding: 8px 12px; border-radius: 10px;
+      color: var(--txt); font-weight: 600; font-size: 13px;
+      cursor: pointer;
+    }
+    button.primary { background: var(--acc); color: #00120a; border: none; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .hint { font-size: 12px; color: var(--muted); }
+    .status {
+      font-size: 13px; padding: 8px 10px; border-radius: 8px;
+      background: var(--soft); border: 1px dashed var(--border);
+    }
+    .pill {
+      display: inline-block; padding: 2px 8px; border-radius: 999px;
+      background: var(--soft); border: 1px solid var(--border); font-size: 12px;
     }
     .chat {
-      flex: 1;
-      overflow: auto;
-      padding: 1em;
+      height: 280px; overflow: auto; border: 1px solid var(--border);
+      background: var(--soft); border-radius: 12px; padding: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
     }
-    .input {
-      border-top: 1px solid #333;
-      padding: 1em;
+    .msg { margin: 4px 0; }
+    .me { color: var(--link); }
+    .peer { color: var(--acc); }
+    .foot { margin-top: 10px; display: flex; gap: 8px; }
+    .foot input {
+      flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--panel); color: var(--txt);
+      font-family: inherit; font-size: 14px;
     }
+    .foot button { white-space: nowrap; }
+    .flex { display: flex; gap: 8px; align-items: center; }
+    .spacer { height: 8px; }
+    .divider { height: 1px; background: var(--border); margin: 10px 0; }
+    .sublabel { font-size: 12px; color: var(--muted); margin-left: 6px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+    .right { text-align: right; }
   </style>
 </head>
 <body>
-  <div id="app">
-    <div class="banner">Staggered Chat System</div>
-    <div class="chat" id="chat-log"></div>
-    <div class="input">
-      <input type="text" id="chat-input" placeholder="Type message..." style="width: 100%; background: #222; color: #eee; border: 1px solid #444;">
+  <div class="wrap">
+    <header>
+      <h1>SCS</h1>
+      <div class="badge"></div>
+    </header>
+
+    <div class="card">
+      <div class="row">
+        <div class="flex">
+          <label class="pill"><input type="checkbox" id="useStun" /> Use public STUN for better reachability</label>
+          <span class="sublabel">Keeps this serverless. Disable for “pure” local-only.</span>
+        </div>
+        <div class="grow"></div>
+        <div class="status" id="netStatus">Idle</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="row">
+        <div class="pill" id="rolePill">Role: none</div>
+        <div class="pill" id="dcPill">Data channel: closed</div>
+        <div class="pill" id="icePill">ICE: new</div>
+        <div class="pill" id="secPill">Key: not ready</div>
+        <div class="pill" id="sasPill">SAS: —</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Start (create offer)</h2>
+        <div class="row">
+          <button class="primary" id="btnCreateOffer">Create offer</button>
+          <button id="btnReset1">Reset</button>
+        </div>
+        <div class="spacer"></div>
+        <label class="muted">Offer package (send to peer)</label>
+        <textarea id="offerOut" readonly placeholder="Click ‘Create offer’..."></textarea>
+        <div class="row">
+          <button id="copyOffer">Copy</button>
+          <span class="hint">Send via any channel (DM, email, QR, etc.).</span>
+        </div>
+        <div class="divider"></div>
+        <label class="muted">Answer package from peer</label>
+        <textarea id="answerIn" placeholder="Paste answer here..."></textarea>
+        <div class="row">
+          <button id="btnApplyAnswer" disabled>Apply answer</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Join (paste offer → generate answer)</h2>
+        <div class="row">
+          <button id="btnReset2">Reset</button>
+        </div>
+        <div class="spacer"></div>
+        <label class="muted">Offer package from peer</label>
+        <textarea id="offerIn" placeholder="Paste offer here..."></textarea>
+        <div class="row">
+          <button class="primary" id="btnAcceptOffer">Accept and generate answer</button>
+        </div>
+        <div class="divider"></div>
+        <label class="muted">Answer package (send back to peer)</label>
+        <textarea id="answerOut" readonly placeholder="Generate after accepting offer..."></textarea>
+        <div class="row">
+          <button id="copyAnswer">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Verify channel security</h2>
+      <div class="row">
+        <div>Short Authentication String (compare with peer):</div>
+        <div class="pill mono" id="sasText">—</div>
+      </div>
+      <div class="hint">Read it aloud or compare visually. If different, do not proceed; restart.</div>
+    </div>
+
+    <div class="card">
+      <h2>Chat</h2>
+      <div class="chat" id="chatLog" aria-live="polite"></div>
+      <div class="foot">
+        <input id="msgInput" type="text" placeholder="Type a secure message..." />
+        <button id="btnSend" disabled>Send</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Notes</h2>
+      <ul>
+        <li>End-to-end encryption: ephemeral ECDH (P-256) → HKDF → AES-GCM. SAS helps detect tampering.</li>
+        <li>Manual handshake packages bundle SDP + ephemeral public key. No server involved.</li>
+        <li>STUN improves NAT traversal. Turn it off for local-only or fully offline networks.</li>
+      </ul>
     </div>
   </div>
-  <script src="scs.min.js" defer></script>
+
+  <script src="scs.min.js"></script>
 </body>
 </html>
