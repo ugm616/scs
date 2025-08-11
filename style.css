@@ -1,42 +1,121 @@
+:root {
+  color-scheme: light dark;
+}
+
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
-  font-family: sans-serif;
-  background: #fff;
-  color: #222;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: Canvas;
+  color: CanvasText;
 }
 
 #room-header {
   text-align: center;
-  padding: 20px;
+  padding: 16px 12px 8px;
+  border-bottom: 1px solid color-mix(in oklab, CanvasText 15%, Canvas);
 }
 
 #room-number {
-  font-size: 1.4em;
-  font-weight: normal;
-  letter-spacing: 0.05em;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+#signal-panel {
+  padding: 8px 12px 0;
+}
+
+details > summary {
+  cursor: pointer;
+  user-select: none;
+  padding: 6px 0;
+  outline: none;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 6px 0;
+  flex-wrap: wrap;
+}
+
+.lbl {
+  width: 64px;
+  opacity: .8;
+}
+
+input[type="text"], textarea {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid color-mix(in oklab, CanvasText 20%, Canvas);
+  background: Canvas;
+  color: CanvasText;
+  border-radius: 4px;
+  min-width: 120px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 5lh;
+}
+
+button {
+  padding: 6px 10px;
+  border: 1px solid color-mix(in oklab, CanvasText 20%, Canvas);
+  background: color-mix(in oklab, Canvas 85%, CanvasText);
+  color: CanvasText;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button[disabled] { opacity: .5; cursor: not-allowed; }
+
+.row.qr {
+  align-items: flex-start;
+  gap: 16px;
+}
+
+#qr-canvas {
+  border: 1px dashed color-mix(in oklab, CanvasText 25%, Canvas);
+  display: none;
+}
+
+.qr-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.hint {
+  font-size: .9rem;
+  opacity: .75;
+  margin: 8px 0 0;
 }
 
 #chat-container {
-  padding: 0 20px;
-  min-height: 60vh;
+  padding: 10px 12px 84px;
+  min-height: 40vh;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-footer {
-  display: flex;
-  padding: 10px 20px;
-  border-top: 1px solid #ccc;
+.msg {
+  margin: 6px 0;
+  line-height: 1.35;
 }
 
-#message-input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #aaa;
-  font-size: 1em;
+.msg.me { text-align: right; }
+.msg .meta {
+  font-size: .8rem;
+  opacity: .65;
 }
-
-#send-button {
-  margin-left: 10px;
-  padding: 8px 16px;
+.msg .bubble {
+  display: inline-block;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in oklab, CanvasText 20%, Canvas);
+  border-radius: 8px;
+  background: color-mix(in oklab, Canvas 90%, CanvasText);
+  max-width: min(640px, 90%);
 }
