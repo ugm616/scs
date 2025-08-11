@@ -8,10 +8,17 @@ SCS creates peer-to-peer chat “rooms” via manual handshake. Ideal for weak n
 
 scs/
 ├── index.html          # Minimal UI with header, input, messages
+
 ├── style.css           # Lightweight optional styling
+
 ├── main.js             # Orchestrates signaling + encryption
+
 ├── crypto.js           # AES-GCM + HKDF utils
+
 ├── signaling.js        # Manual signaling via URL/QR
+
 ├── fallback.js         # Handles unstable/slow connections
+
 ├── utils.js            # URL-safe base64, UUID, timers
+
 ├── README.md           # Documentation & walkthrough
